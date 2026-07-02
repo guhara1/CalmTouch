@@ -204,6 +204,16 @@ export function linkList(title, links) {
   return `<h3>${esc(title)}</h3><ul class="linklist">${items}</ul>`;
 }
 
+// ---------- 히어로/배너 이미지 (모든 지역 페이지 노출) ----------
+// 교체 대상 파일: assets/img/hero.jpg
+export function heroImage(alt, mode = "banner") {
+  const img = `<img src="/assets/img/hero.jpg" alt="${esc(alt || site.brand + " 인천·부천·시흥 서부수도권 생활권 안내")}" width="1200" height="380" loading="${mode === "hero" ? "eager" : "lazy"}" decoding="async">`;
+  if (mode === "hero") {
+    return `<figure class="hero-media">${img}</figure>`;
+  }
+  return `<div class="container"><figure class="hero-media page-banner">${img}</figure></div>`;
+}
+
 // ---------- 요금표 (모든 지역 페이지 노출) ----------
 export function priceTable() {
   const won = (n) => n.toLocaleString("ko-KR");

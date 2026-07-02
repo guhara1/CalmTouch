@@ -4,7 +4,7 @@
 // (지역명만 바꾼 얇은 본문이 아니라 page.focus / nearby / useNote 등
 //  페이지 고유 필드를 실제 문장에 반영)
 // =====================================================================
-import { esc, faqBlock, trustBlock, linkList, ctaBand, priceTable } from "./render.mjs";
+import { esc, faqBlock, trustBlock, linkList, ctaBand, priceTable, heroImage } from "./render.mjs";
 
 const p = (t) => `<p>${t}</p>`;
 
@@ -41,6 +41,9 @@ function policySection() {
 // 표준 상세페이지(지역/생활권/연결권/역세권/이용/확인) 조립
 export function detailBody(page) {
   const secs = [];
+
+  // 0) 배너 이미지 (모든 지역 페이지 노출)
+  secs.push(heroImage(page.imageAlt, "banner"));
 
   // 1) 개요 (페이지 H1)
   secs.push(`<section class="section"><div class="container prose">

@@ -8,7 +8,7 @@ import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import site from "./data/site.json" with { type: "json" };
-import { page, esc, faqBlock, trustBlock, ctaBand, linkList, buildSchema, priceTable } from "./src/lib/render.mjs";
+import { page, esc, faqBlock, trustBlock, ctaBand, linkList, buildSchema, priceTable, heroImage } from "./src/lib/render.mjs";
 import { detailBody, articleBody } from "./src/lib/content.mjs";
 import { lifeareas } from "./data/content/lifeareas.mjs";
 import { corridors } from "./data/content/corridors.mjs";
@@ -65,6 +65,7 @@ async function buildMain() {
     <a class="btn btn--ghost btn--lg" href="/corridor/">연결 생활권</a>
     <a class="btn btn--ghost btn--lg" href="/check/">예약 전 확인</a>
   </div>
+  ${heroImage(main.imageAlt, "hero")}
 </div></section>
 
 <section class="section"><div class="container">
@@ -134,6 +135,7 @@ async function buildHubs() {
     <a class="btn btn--ghost btn--lg" href="/check/">예약 전 확인</a>
     <a class="btn btn--ghost btn--lg" href="/contact/">문의하기</a>
   </div>
+  ${heroImage(h.imageAlt, "hero")}
 </div></section>
 
 <section class="section"><div class="container prose">
@@ -175,6 +177,7 @@ async function buildDistricts() {
     const dongChips = dongs.map((x) => `<a class="dong-chip${x.kind === "life" ? " dong-chip--life" : ""}" href="${x.url}">${esc(x.label)}</a>`).join("");
 
     const body = `
+${heroImage(d.imageAlt, "banner")}
 <section class="section"><div class="container prose">
   <h1>${esc(d.h1)}</h1>
   <p>${esc(d.intro)}</p>
@@ -209,6 +212,7 @@ ${ctaBand()}
 async function buildIndex(meta, items, kicker) {
   const cards = items.map((it) => card(kicker, it.h1.replace(" 안내", ""), (it.overview || it.description || "").slice(0, 62) + "…", it.url, "자세히 보기")).join("");
   const body = `
+${heroImage(meta.imageAlt, "banner")}
 <section class="section"><div class="container">
   <div class="section__head"><h1>${esc(meta.h1)}</h1><p>${esc(meta.lede)}</p></div>
   <div class="grid grid--3">${cards}</div>

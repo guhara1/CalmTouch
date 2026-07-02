@@ -1,4 +1,16 @@
 import { crumb, whw, baseFaq, LAST_UPDATED, OG } from "./_helpers.mjs";
+import { lifeareas } from "./lifeareas.mjs";
+import { stations } from "./stations.mjs";
+
+// 상위 생활권/역 이름 조회 (동 페이지 본문을 고유하게 만들기 위해)
+const lifeName = (slug) => {
+  const l = lifeareas.find((a) => a.slug === slug);
+  return l ? l.h1.replace(/\s*생활권\s*안내$/, "").replace(/\s*안내$/, "").trim() : "";
+};
+const stationName = (slug) => {
+  const s = stations.find((a) => a.slug === slug);
+  return s ? s.h1.replace(/\s*역세권\s*안내$/, "").replace(/\s*안내$/, "").trim() : "";
+};
 
 // 행정동 데이터.
 //  - life: 이미 존재하는 생활권 페이지가 그 동을 대표 → 버튼은 그 생활권으로 연결(중복 페이지 미생성)
@@ -117,36 +129,39 @@ for (const [districtSlug, d] of Object.entries(districtDongs)) {
   for (const x of d.dongs) {
     if (x.life) continue; // 생활권 페이지로 대체 → 새 페이지 미생성
     const url = `/${d.region}/${districtSlug}/${x.slug}/`;
+    const pLife = lifeName(x.area); // 상위 생활권명
+    const sName = x.station ? stationName(x.station) : ""; // 가까운 역명
     dongPages.push({
       slug: x.slug,
       region: d.region,
       districtSlug,
       url,
       title: `${x.name} 출장마사지 · ${d.regionLabel} ${d.name} 안내｜간다GO`,
-      description: `${x.name} 방문 전 주소·출입·인접 생활권 확인을 안내합니다.`.slice(0, 80),
+      description: `${x.name} 방문 전 주소·건물 출입·${pLife || d.name} 인접권 확인 안내.`.slice(0, 80),
       h1: `${x.name} 안내`,
       keywords: [`${x.name} 출장마사지`, `${x.name} 홈타이`, `${d.regionLabel} ${d.name}`],
       breadcrumb: [crumb.home, crumb[d.region], { label: d.name, url: `/${d.region}/${districtSlug}/` }, { label: x.name, url }],
-      overview: x.focus,
+      overview: `${x.focus} 방문 위치가 아파트 단지인지 상가·주택가인지에 따라 확인할 내용이 달라, 정확한 도로명 주소와 건물 유형을 먼저 확인하는 것이 좋습니다.`,
       parentNote: `행정구역상 ${d.regionLabel} ${d.name}에 속합니다.${x.collapse ? ` ${x.collapse}은 대표동 ${x.name}으로 묶어 안내합니다.` : ""}`,
-      lifeNote: `${x.name}은 상위 생활권 안내와 함께 확인하면 위치를 더 정확히 파악할 수 있습니다.`,
-      nearbyNote: x.station
-        ? `가까운 역과 인접 지역을 함께 확인하세요.`
-        : `가까운 생활권과 인접 지역을 함께 확인하세요.`,
-      useNote: `${x.name}에서 방문형 서비스를 이용할 때는 정확한 도로명 주소와 건물 출입 방식(공동현관·오피스텔 관리 규정 포함)을 먼저 확인하는 것이 좋습니다.`,
+      lifeNote: pLife
+        ? `${x.name}은 ${pLife} 생활권에 속하는 지역으로, 개별 동 위치와 함께 넓은 ${pLife} 생활권 안내를 확인하면 방문 위치를 더 정확히 파악할 수 있습니다.`
+        : `${x.name}은 ${d.name}의 주요 행정동으로, 인접 생활권 안내와 함께 확인하면 위치를 더 정확히 파악할 수 있습니다.`,
+      nearbyNote: sName
+        ? `${x.name}에서 가장 가까운 역은 ${sName}입니다. 역세권 안내에서 인접 지역과 이동 기준, 환승 정보를 함께 확인할 수 있습니다.`
+        : `${x.name}과 가까운 생활권·지하철역은 ${pLife || d.name} 안내에서 확인할 수 있으며, 인접 도시 이동권도 함께 살펴보는 것이 좋습니다.`,
+      useNote: `${x.name}에서 방문형 서비스를 이용할 때는 정확한 도로명 주소와 동·호수, 공동현관 출입 방식(오피스텔·아파트 관리 규정 포함)을 먼저 확인하는 것이 좋습니다. ${d.name}은 상가·주거·신축 단지가 섞여 있어 방문 위치의 건물 유형 확인이 특히 중요합니다.`,
       links: [{ title: "상위 생활권·역세권", items: [
-        { label: "상위 생활권 안내", url: lifeUrl(d.region, x.area) },
-        { label: `${d.name} 안내`, url: `/${d.region}/${districtSlug}/` },
-        ...(x.station ? [{ label: "가까운 역 확인", url: `/station/${x.station}/` }] : [])
+        { label: `${pLife || d.name} 생활권 안내`, url: lifeUrl(d.region, x.area) },
+        { label: `${d.regionLabel} ${d.name} 안내`, url: `/${d.region}/${districtSlug}/` },
+        ...(x.station ? [{ label: `${sName} 주변 확인`, url: `/station/${x.station}/` }] : [])
       ]}],
       faq: baseFaq,
       ...whw(`${d.regionLabel} ${d.name} ${x.name}`),
       lastUpdated: LAST_UPDATED,
       ogImage: OG,
-      imageAlt: `${d.regionLabel} ${d.name} ${x.name} 안내 이미지`,
-      indexPriority: 3,
-      contentStatus: "draft",
-      noindex: true // 도어웨이 방지: 존재·버튼·크롤 가능, 색인은 수요 확인 후(스펙 Phase 1-C)
+      imageAlt: `${d.regionLabel} ${d.name} ${x.name} 방문형 관리 안내 이미지`,
+      indexPriority: 2,
+      contentStatus: "ready"
     });
   }
 }
