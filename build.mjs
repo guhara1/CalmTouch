@@ -268,7 +268,25 @@ async function run() {
   await mkdir(`${DIST}/assets/img`, { recursive: true });
   await cp(`${ROOT}/src/styles/tokens.css`, `${DIST}/assets/tokens.css`);
   await cp(`${ROOT}/src/styles/components.css`, `${DIST}/assets/components.css`);
-  await cp(`${ROOT}/assets/img/og-default.svg`, `${DIST}/assets/img/og-default.svg`);
+  // 이미지/파비콘 등 assets/img 전체 복사 (og, favicon.svg, PNG 아이콘들)
+  await cp(`${ROOT}/assets/img`, `${DIST}/assets/img`, { recursive: true });
+
+  // 웹 앱 매니페스트
+  const manifest = {
+    name: site.brand,
+    short_name: site.brand,
+    description: "인천·부천·시흥 서부수도권 생활권 안내",
+    start_url: "/",
+    display: "standalone",
+    background_color: "#0a0f0e",
+    theme_color: "#0a0f0e",
+    icons: [
+      { src: "/assets/img/icon-192.png", sizes: "192x192", type: "image/png" },
+      { src: "/assets/img/icon-512.png", sizes: "512x512", type: "image/png" },
+      { src: "/assets/img/favicon.svg", sizes: "any", type: "image/svg+xml" }
+    ]
+  };
+  await writeFile(`${DIST}/site.webmanifest`, JSON.stringify(manifest, null, 2), "utf8");
 
   await buildMain();
   await buildHubs();
@@ -281,9 +299,9 @@ async function run() {
   for (const c of checks) await emit(c, detailBody(c));
   for (const p of policies) await emit(p, articleBody(p, p.bodyHtml));
 
-  await buildIndex({ url: "/corridor/", title: "연결 생활권 안내｜서부수도권 이동 기준 · 간다GO", description: "인천·부천·시흥 도시 경계를 넘는 연결 생활권을 안내합니다.", h1: "연결 생활권", lede: "도시 경계를 넘는 이동 기준·인접 생활권·예약 전 확인을 안내합니다.", keywords: ["연결 생활권", "서부수도권 이동권"], breadcrumb: [{ label: "서부수도권 홈", url: "/" }, { label: "연결 생활권", url: "/corridor/" }], ogImage: "/assets/img/og-default.svg", indexPriority: 1, lastUpdated: "2026-07-02" }, corridors, "연결 생활권");
+  await buildIndex({ url: "/corridor/", title: "인천·부천·시흥 출장마사지 · 연결 생활권 안내｜간다GO", description: "인천·부천·시흥 도시 경계를 넘는 연결 생활권을 안내합니다.", h1: "연결 생활권", lede: "도시 경계를 넘는 이동 기준·인접 생활권·예약 전 확인을 안내합니다.", keywords: ["연결 생활권", "서부수도권 이동권"], breadcrumb: [{ label: "서부수도권 홈", url: "/" }, { label: "연결 생활권", url: "/corridor/" }], ogImage: "/assets/img/og-default.svg", indexPriority: 1, lastUpdated: "2026-07-02" }, corridors, "연결 생활권");
 
-  await buildIndex({ url: "/station/", title: "지하철역 기준 안내｜인천·부천·시흥 역세권 · 간다GO", description: "인천·부천·시흥 주요 지하철역 기준 생활권 안내입니다.", h1: "지하철역 기준 안내", lede: "환승역도 노선별로 나누지 않고 역명 기준 1개 페이지로 안내합니다.", keywords: ["지하철역 안내", "역세권"], breadcrumb: [{ label: "서부수도권 홈", url: "/" }, { label: "지하철역", url: "/station/" }], ogImage: "/assets/img/og-default.svg", indexPriority: 1, lastUpdated: "2026-07-02" }, stations, "역세권");
+  await buildIndex({ url: "/station/", title: "인천·부천·시흥 출장마사지 · 지하철역 안내｜간다GO", description: "인천·부천·시흥 주요 지하철역 기준 생활권 안내입니다.", h1: "지하철역 기준 안내", lede: "환승역도 노선별로 나누지 않고 역명 기준 1개 페이지로 안내합니다.", keywords: ["지하철역 안내", "역세권"], breadcrumb: [{ label: "서부수도권 홈", url: "/" }, { label: "지하철역", url: "/station/" }], ogImage: "/assets/img/og-default.svg", indexPriority: 1, lastUpdated: "2026-07-02" }, stations, "역세권");
 
   await buildIndex({ url: "/use/", title: "이용 장소별 안내｜자택·호텔·오피스텔 · 간다GO", description: "자택·호텔·오피스텔 등 이용 장소별 예약 전 확인을 안내합니다.", h1: "이용 장소별 안내", lede: "이용 장소에 따라 확인해야 할 주소·출입·이동 기준이 다릅니다.", keywords: ["이용 장소 안내"], breadcrumb: [{ label: "서부수도권 홈", url: "/" }, { label: "이용 장소", url: "/use/" }], ogImage: "/assets/img/og-default.svg", indexPriority: 1, lastUpdated: "2026-07-02" }, usecases, "이용 장소");
 

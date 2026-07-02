@@ -180,7 +180,7 @@ export const stations = raw.map((r) => ({
   slug: r.slug,
   region: r.region,
   url: `/station/${r.slug}/`,
-  title: `${r.name} 역세권 안내｜${r.city} 방문 전 확인 · 간다GO`,
+  title: `${r.name} 출장마사지 · ${r.city} 역세권 안내｜간다GO`,
   description: `${r.name} 주변 생활권·인접 지역·이용 장소별 예약 전 확인 안내.`.slice(0, 80),
   h1: `${r.name} 역세권 안내`,
   keywords: [`${r.name} 출장마사지`, `${r.name} 홈타이`, `${r.city} 역세권`],

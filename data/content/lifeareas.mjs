@@ -501,8 +501,12 @@ const raw = [
   }
 ];
 
+// 지역명(생활권명) 추출: 타이틀은 "지역 + 출장마사지"로 시작
+const placeOf = (h1) => h1.replace(/\s*(생활권\s*)?안내$/, "").trim();
+
 export const lifeareas = raw.map((r) => ({
   ...r,
+  title: `${placeOf(r.h1)} 출장마사지 · ${r.regionLabel} 생활권 안내｜간다GO`,
   url: `/${r.region}/life/${r.slug}/`,
   breadcrumb: [crumb.home, crumb[r.region], { label: r.h1.replace(" 안내", ""), url: `/${r.region}/life/${r.slug}/` }],
   faq: baseFaq,

@@ -56,7 +56,7 @@ const raw = [
 export const corridors = raw.map((r) => ({
   slug: r.slug,
   url: `/corridor/${r.slug}/`,
-  title: `${r.title} 안내｜서부수도권 이동 기준 · 간다GO`,
+  title: `${r.title.replace(/\s*(연결 생활권|인접권)$/, "")} 출장마사지 · ${r.title.includes("인접권") ? "인접권" : "연결 생활권"} 안내｜간다GO`,
   description: `${r.title} 포함 도시·역·이용 장소별 예약 전 확인을 안내합니다.`.slice(0, 80),
   h1: `${r.title} 안내`,
   keywords: [r.title, "서부수도권 연결 생활권", "인천 부천 시흥 이동권"],

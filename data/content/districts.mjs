@@ -98,7 +98,7 @@ export const districts = raw.map((r) => {
     ...r,
     regionLabel,
     url: `/${r.region}/${r.slug}/`,
-    title: `${regionLabel} ${r.name} 생활권 안내｜방문 전 확인 · 간다GO`,
+    title: `${regionLabel} ${r.name} 출장마사지 · 생활권 안내｜간다GO`,
     description: `${regionLabel} ${r.name} 주요 생활권·역세권·예약 전 확인을 안내합니다.`.slice(0, 80),
     h1: `${regionLabel} ${r.name} 생활권 안내`,
     keywords: [`${regionLabel} ${r.name} 출장마사지`, `${r.name} 홈타이`, `${regionLabel} ${r.name} 생활권`],
