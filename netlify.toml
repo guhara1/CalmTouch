@@ -1,0 +1,30 @@
+# Netlify 배포 설정
+# 빌드가 dist/에 정적 HTML을 생성하므로 publish = "dist"
+
+[build]
+  command = "node build.mjs"
+  publish = "dist"
+
+[build.environment]
+  # build.mjs가 JSON import attributes(`with { type: "json" }`)를 사용 → Node 20.10+ 필요
+  NODE_VERSION = "22"
+  # Playwright 브라우저는 빌드에 불필요(스크린샷 전용) → 설치 스킵
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1"
+
+# 정적 호스팅: /incheon/ → /incheon/index.html 자동 해석, 없는 경로는 dist/404.html
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
+
+# 보안/캐시 헤더
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
