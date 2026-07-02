@@ -205,9 +205,9 @@ export function linkList(title, links) {
 }
 
 // ---------- 히어로/배너 이미지 (모든 지역 페이지 노출) ----------
-// 교체 대상 파일: assets/img/hero.jpg
+// 교체 대상 파일: assets/img/hero.webp
 export function heroImage(alt, mode = "banner") {
-  const img = `<img src="/assets/img/hero.jpg" alt="${esc(alt || site.brand + " 인천·부천·시흥 서부수도권 생활권 안내")}" width="1200" height="380" loading="${mode === "hero" ? "eager" : "lazy"}" decoding="async">`;
+  const img = `<img src="/assets/img/hero.webp" alt="${esc(alt || site.brand + " 인천·부천·시흥 서부수도권 생활권 안내")}" width="1600" height="900" loading="${mode === "hero" ? "eager" : "lazy"}" decoding="async">`;
   if (mode === "hero") {
     return `<figure class="hero-media">${img}</figure>`;
   }
