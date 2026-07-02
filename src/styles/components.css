@@ -306,6 +306,42 @@ a.card:hover .card__more { color: var(--c-accent-300); gap: 0.6rem; }
 .pricing__note a { color: var(--c-accent-400); font-weight: var(--fw-semibold); }
 .pricing__note a:hover { color: #fff; }
 
+/* ---------- 플로팅 전화 버튼 (모바일 우하단 · 전 페이지 고정) ---------- */
+.call-fab {
+  position: fixed; z-index: 300;
+  right: 18px; bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  width: 62px; height: 62px; border-radius: 50%;
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+  background: linear-gradient(135deg, var(--c-accent-400), var(--c-accent-600));
+  color: #fff; text-decoration: none;
+  box-shadow: 0 10px 26px -6px rgba(234, 88, 12, 0.65), 0 2px 6px rgba(0,0,0,0.4);
+  animation: fab-wiggle 2.4s ease-in-out infinite;
+}
+.call-fab:hover { color: #fff; }
+.call-fab__ring {
+  position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+  box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.55);
+  animation: fab-ring 1.8s ease-out infinite;
+}
+.call-fab__ic { display: block; }
+.call-fab__label { font-size: 0.6rem; font-weight: var(--fw-bold); letter-spacing: -0.02em; line-height: 1; }
+
+@keyframes fab-ring {
+  0% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.55); }
+  70% { box-shadow: 0 0 0 18px rgba(249, 115, 22, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+}
+@keyframes fab-wiggle {
+  0%, 82%, 100% { transform: translateY(0) rotate(0); }
+  85% { transform: translateY(-3px) rotate(-12deg); }
+  89% { transform: translateY(-3px) rotate(10deg); }
+  93% { transform: translateY(-2px) rotate(-8deg); }
+  97% { transform: translateY(0) rotate(4deg); }
+}
+@media (min-width: 1024px) {
+  .call-fab { right: 26px; bottom: 26px; }
+}
+
 /* ---------- 반응형 ---------- */
 @media (max-width: 900px) {
   .grid--3, .grid--4 { grid-template-columns: repeat(2, 1fr); }
