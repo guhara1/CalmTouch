@@ -151,7 +151,29 @@ const raw = [
     overview: "신천역은 서해선 시흥 신천의 역으로, 대야·신천 주거 생활권과 부천·광명 인접권에 자리합니다.",
     transfer: "출구별 페이지는 만들지 않으며 역명 기준 1개 페이지로 안내합니다.",
     near: "신천역 주변은 대야·신천 생활권이며, 부천 방향으로는 부천·시흥 인접권과 이어집니다.",
-    links: [ { label: "대야·신천 생활권", url: "/siheung/life/daeya-sincheon/" }, { label: "부천·시흥 인접권", url: "/corridor/bucheon-siheung-adjacent/" }, { label: "자택 이용 전 확인", url: "/use/home/" } ] }
+    links: [ { label: "대야·신천 생활권", url: "/siheung/life/daeya-sincheon/" }, { label: "부천·시흥 인접권", url: "/corridor/bucheon-siheung-adjacent/" }, { label: "자택 이용 전 확인", url: "/use/home/" } ] },
+
+  // ---- 계양·제물포 ----
+  { slug: "gyesan-station", name: "계산역", city: "인천 계양구", region: "인천",
+    overview: "계산역은 인천1호선 계양구 계산의 역으로, 계양구청과 계산 상권, 계양산 방향 주거지가 인접한 역세권입니다.",
+    transfer: "출구별 페이지는 만들지 않으며 역명 기준 1개 페이지로 안내합니다.",
+    near: "계산역 주변은 계산·작전 생활권이며, 부천 방향으로는 원종·고강 연결 생활권과 이어집니다.",
+    links: [ { label: "계산·작전 생활권", url: "/incheon/life/gyesan-jakjeon/" }, { label: "작전역 주변 확인", url: "/station/jakjeon-station/" }, { label: "자택 이용 전 확인", url: "/use/home/" } ] },
+  { slug: "jakjeon-station", name: "작전역", city: "인천 계양구", region: "인천",
+    overview: "작전역은 인천1호선 계양구 작전의 역으로, 주거단지와 상권이 밀집한 역세권입니다. 서울 강서·부천 방향 접근성이 좋습니다.",
+    transfer: "출구별 페이지는 만들지 않으며 역명 기준 1개 페이지로 안내합니다.",
+    near: "작전역 주변은 계산·작전 생활권이며, 인접 이동권으로는 원종·고강 연결 생활권과 이어집니다.",
+    links: [ { label: "계산·작전 생활권", url: "/incheon/life/gyesan-jakjeon/" }, { label: "원종·고강 연결 생활권", url: "/corridor/wonjong-gogang/" }, { label: "자택 이용 전 확인", url: "/use/home/" } ] },
+  { slug: "jemulpo-station", name: "제물포역", city: "인천 미추홀·제물포권", region: "인천",
+    overview: "제물포역은 1호선 인천 원도심의 역으로, 대학가와 오래된 상권, 주택가가 인접한 역세권입니다. 제물포·동인천 원도심 생활권의 중심 중 하나입니다.",
+    transfer: "출구별 페이지는 만들지 않으며 역명 기준 1개 페이지로 안내합니다.",
+    near: "제물포역 주변은 제물포·동인천 생활권이며, 주안 방향으로는 주안·도화 생활권과 이어집니다.",
+    links: [ { label: "제물포·동인천 생활권", url: "/incheon/life/jemulpo-dongincheon/" }, { label: "주안·도화 생활권", url: "/incheon/life/juan-dohwa/" }, { label: "자택 이용 전 확인", url: "/use/home/" } ] },
+  { slug: "dongincheon-station", name: "동인천역", city: "인천 제물포권", region: "인천",
+    overview: "동인천역은 1호선 인천 원도심의 역으로, 개항장 근대 거리와 전통시장, 오래된 상권이 인접한 역세권입니다. 골목이 촘촘한 원도심 특성상 정확한 위치 확인이 중요합니다.",
+    transfer: "출구별 페이지는 만들지 않으며 역명 기준 1개 페이지로 안내합니다.",
+    near: "동인천역 주변은 제물포·동인천 생활권이며, 중구 개항장·신포동 방향과도 가깝습니다.",
+    links: [ { label: "제물포·동인천 생활권", url: "/incheon/life/jemulpo-dongincheon/" }, { label: "자택 이용 전 확인", url: "/use/home/" }, { label: "예약 전 방문 주소 확인", url: "/check/address/" } ] }
 ];
 
 export const stations = raw.map((r) => ({

@@ -48,6 +48,20 @@ const raw = [
     dongs: ["검단동", "원당동", "당하동", "마전동", "불로동"]
   },
   {
+    region: "incheon", slug: "gyeyang-gu", name: "계양구",
+    intro: "인천 계양구는 계산·작전 주거·상권을 중심으로 한 구로, 인천1호선이 지나고 서울 강서·부천 오정과 맞닿은 경계 지역입니다. 계양구청·계양산 일대의 생활 인프라가 밀집해 있으며, 계양신도시(3기 신도시) 조성으로 신축 단지가 순차적으로 들어서고 있어 최신 주소·단지명 확인이 중요합니다.",
+    lifeSlugs: ["gyesan-jakjeon"],
+    stationSlugs: ["gyesan-station", "jakjeon-station"],
+    dongs: ["계산동", "작전동", "효성동", "서운동", "병방동", "임학동"]
+  },
+  {
+    region: "incheon", slug: "jemulpo-gu", name: "제물포권",
+    intro: "인천 제물포권은 제물포·동인천을 중심으로 한 인천의 대표 원도심 지역입니다. 1호선 제물포역·동인천역을 축으로 오래된 상권과 주택가, 개항장 근대 거리가 함께 있어 골목·다세대 주소 확인이 특히 중요합니다. 인천 행정체제 개편에 따라 제물포구의 명칭과 관할 구역이 조정될 수 있어 확정 고시된 최신 기준으로 확인합니다.",
+    lifeSlugs: ["jemulpo-dongincheon"],
+    stationSlugs: ["jemulpo-station", "dongincheon-station"],
+    dongs: ["도원동", "숭의동", "용현동", "신흥동", "송현동"]
+  },
+  {
     region: "incheon", slug: "yeongjong-gu", name: "영종권",
     intro: "인천 영종권은 인천공항과 영종·운서 하늘도시를 아우르는 공항 배후 구입니다. 공항 종사자 주거지, 하늘도시 신축 단지, 공항권 숙소가 함께 있으며 도심과 다리로 연결되어 이동 시간이 길 수 있습니다.",
     lifeSlugs: ["incheon-airport", "yeongjong-unseo"],
