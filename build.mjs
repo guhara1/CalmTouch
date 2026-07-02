@@ -8,7 +8,7 @@ import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import site from "./data/site.json" with { type: "json" };
-import { page, esc, faqBlock, trustBlock, ctaBand, linkList, buildSchema, priceTable, heroImage } from "./src/lib/render.mjs";
+import { page, esc, faqBlock, trustBlock, ctaBand, linkList, buildSchema, priceTable, heroImage, reviewsBlock, longTailTopics } from "./src/lib/render.mjs";
 import { detailBody, articleBody } from "./src/lib/content.mjs";
 import { lifeareas } from "./data/content/lifeareas.mjs";
 import { corridors } from "./data/content/corridors.mjs";
@@ -31,7 +31,7 @@ async function emit(p, bodyHtml) {
   const out = `${DIST}${rel}`;
   await mkdir(dirname(out), { recursive: true });
   await writeFile(out, html, "utf8");
-  collected.push({ url: p.url, lastUpdated: p.lastUpdated, noindex: !!p.noindex, priority: p.indexPriority || 1 });
+  collected.push({ url: p.url, lastUpdated: p.lastUpdated, noindex: !!p.noindex, priority: p.indexPriority || 1, title: p.title, description: p.description });
 }
 
 const card = (kicker, title, desc, url, more = "자세히 보기") =>
@@ -102,7 +102,11 @@ async function buildMain() {
   </ul>
 </div></section>
 
+${longTailTopics("인천·부천·시흥", "")}
+
 ${priceTable()}
+
+${reviewsBlock()}
 
 ${faqBlock(main.faq)}
 
@@ -164,7 +168,11 @@ ${distSection}
   <ul class="linklist">${stationLinks}</ul>
 </div></section>
 
+${longTailTopics(h.h1.split(" ")[0], h.h1.split(" ")[0])}
+
 ${priceTable()}
+
+${reviewsBlock()}
 
 ${faqBlock(h.faq)}
 <section class="section"><div class="container prose">${trustBlock(h.who, h.how, h.why)}</div></section>
@@ -208,7 +216,9 @@ ${st.length ? `<section class="section"><div class="container">
   <ul class="linklist">${stationLinks}</ul>
 </div></section>` : ""}
 
+${longTailTopics(`${d.regionLabel} ${d.name}`, d.regionLabel)}
 ${priceTable()}
+${reviewsBlock()}
 ${faqBlock(d.faq)}
 <section class="section"><div class="container prose">${trustBlock(d.who, d.how, d.why)}</div></section>
 ${ctaBand()}
@@ -227,6 +237,7 @@ ${heroImage(meta.imageAlt, "banner")}
   <div class="grid grid--3">${cards}</div>
 </div></section>
 ${priceTable()}
+${reviewsBlock()}
 ${ctaBand()}
 <div style="height:2rem"></div>`;
   await emit(meta, body);
@@ -267,13 +278,45 @@ async function buildSitemap() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
   await writeFile(`${DIST}/sitemap.xml`, xml, "utf8");
 
-  const robots = `User-agent: *\nAllow: /\n\nSitemap: ${site.baseUrl}/sitemap.xml\n`;
+  // robots.txt — 구글(Googlebot)·네이버(Yeti)·빙 등 전체 허용 + 사이트맵 명시
+  const robots = [
+    "User-agent: *",
+    "Allow: /",
+    "",
+    "User-agent: Yeti",       // 네이버
+    "Allow: /",
+    "",
+    "User-agent: Googlebot",
+    "Allow: /",
+    "",
+    `Sitemap: ${site.baseUrl}/sitemap.xml`,
+    `Sitemap: ${site.baseUrl}/rss.xml`,
+    ""
+  ].join("\n");
   await writeFile(`${DIST}/robots.txt`, robots, "utf8");
+
+  // RSS 2.0 피드 — 색인 발견 촉진(네이버 서치어드바이저 RSS 제출 대응). 최신 lastmod 순 상위 40개.
+  const esc2 = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const feed = collected
+    .filter((c) => !c.noindex)
+    .slice()
+    .sort((a, b) => String(b.lastUpdated).localeCompare(String(a.lastUpdated)) || a.priority - b.priority)
+    .slice(0, 40);
+  const rssItems = feed
+    .map((c) => {
+      const loc = `${site.baseUrl}${c.url}`;
+      const d = new Date(`${c.lastUpdated || "2026-07-02"}T09:00:00+09:00`).toUTCString();
+      return `    <item>\n      <title>${esc2(c.title || site.brand)}</title>\n      <link>${loc}</link>\n      <guid isPermaLink="true">${loc}</guid>\n      <pubDate>${d}</pubDate>\n      <description>${esc2(c.description || "")}</description>\n    </item>`;
+    })
+    .join("\n");
+  const pub = new Date("2026-07-02T09:00:00+09:00").toUTCString();
+  const rss = `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n  <channel>\n    <title>${esc2(site.siteName)} · 인천·부천·시흥 서부수도권 생활권 안내</title>\n    <link>${site.baseUrl}/</link>\n    <atom:link href="${site.baseUrl}/rss.xml" rel="self" type="application/rss+xml"/>\n    <description>인천·부천·시흥 서부수도권 생활권·지하철역·예약 전 확인 안내</description>\n    <language>ko</language>\n    <lastBuildDate>${pub}</lastBuildDate>\n${rssItems}\n  </channel>\n</rss>\n`;
+  await writeFile(`${DIST}/rss.xml`, rss, "utf8");
 }
 
 // ---------------- 404 ----------------
 async function build404() {
-  const p = { url: "/404", title: "페이지를 찾을 수 없습니다 · 간다GO", description: "요청하신 페이지를 찾을 수 없습니다. 홈에서 다시 확인하세요.", h1: "404", breadcrumb: [{ label: "홈", url: "/" }], noindex: true, ogImage: "/assets/img/og-default.svg" };
+  const p = { url: "/404", title: "페이지를 찾을 수 없습니다 · 간다GO", description: "요청하신 페이지를 찾을 수 없습니다. 홈에서 다시 확인하세요.", h1: "404", breadcrumb: [{ label: "홈", url: "/" }], noindex: true, ogImage: "/assets/img/og-default.svg", noReviews: true };
   const body = `<section class="section"><div class="container container--narrow prose" style="text-align:center;padding:4rem 0">
     <h1 style="font-size:3rem">404</h1>
     <p>요청하신 페이지를 찾을 수 없습니다.</p>

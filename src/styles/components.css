@@ -215,6 +215,20 @@ a.card:hover .card__more { color: var(--c-accent-300); gap: 0.6rem; }
 .linklist a { display: block; padding: 0.6rem 0.9rem; background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--radius-sm); font-size: var(--fs-sm); text-decoration: none; color: var(--c-ink-700); }
 .linklist a:hover { border-color: var(--c-accent-400); color: var(--c-accent-300); background: var(--c-accent-soft); }
 
+/* ---------- 고객 후기 ---------- */
+.review-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-4); }
+.review-card {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--c-surface) 92%, #fff 8%), var(--c-surface));
+  border: 1px solid var(--c-line); border-radius: var(--radius-lg); padding: var(--sp-5); margin: 0;
+  display: flex; flex-direction: column; gap: var(--sp-3);
+}
+.review-stars { color: var(--c-gold-300); font-size: 1.05rem; letter-spacing: 1px; display: flex; align-items: center; gap: 0.5rem; }
+.review-stars b { color: var(--c-ink-900); font-size: var(--fs-sm); }
+.review-card blockquote { margin: 0; color: var(--c-ink-700); font-size: var(--fs-sm); line-height: var(--lh-body); }
+.review-card figcaption { color: var(--c-ink-500); font-size: var(--fs-xs); border-top: 1px dashed var(--c-line-strong); padding-top: var(--sp-3); }
+@media (max-width: 900px) { .review-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .review-grid { grid-template-columns: 1fr; } }
+
 /* ---------- 행정동 버튼(칩) ---------- */
 .dong-grid { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
 .dong-chip {

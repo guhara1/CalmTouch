@@ -7,6 +7,8 @@
   "phone": "0508-202-4719",
   "phoneHref": "tel:0508-202-4719",
   "reservationLabel": "전화예약",
+  "naverVerification": "6df485319ca032d38d98131c2e13c6d4f182a1bb",
+  "googleVerification": "",
   "_telegram_note": "아래 telegram 값은 임시 플레이스홀더입니다. 실제 텔레그램 핸들로 교체하세요 (예: https://t.me/실제핸들).",
   "telegram": {
     "site": "https://t.me/gandago_site",

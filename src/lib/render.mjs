@@ -6,15 +6,33 @@ import site from "../../data/site.json" with { type: "json" };
 import nav from "../../data/common/nav.json" with { type: "json" };
 import authors from "../../data/common/authors.json" with { type: "json" };
 import pricing from "../../data/common/pricing.json" with { type: "json" };
+import reviews from "../../data/common/reviews.json" with { type: "json" };
 
 const esc = (s = "") =>
   String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 const abs = (u) => (u.startsWith("http") ? u : site.baseUrl + u);
 
+// 실제 후기 기반 집계 평점 (items가 있을 때만)
+export const reviewAgg = reviews.items && reviews.items.length
+  ? {
+      count: reviews.items.length,
+      value: Math.round((reviews.items.reduce((s, r) => s + r.rating, 0) / reviews.items.length) * 10) / 10,
+      best: reviews.bestRating || 5,
+      worst: reviews.worstRating || 1,
+      items: reviews.items
+    }
+  : null;
+
+const regionCity = (region) =>
+  region === "incheon" ? "인천광역시" : region === "bucheon" ? "부천시" : region === "siheung" ? "시흥시" : null;
+
 // ---------- Schema.org JSON-LD ----------
 export function buildSchema(page) {
   const graph = [];
+  const showReviews = reviewAgg && !page.noReviews;
+  const area = regionCity(page.region);
+  const areaServed = area ? [{ "@type": "City", name: area }] : ["인천", "부천", "시흥"];
 
   graph.push({
     "@type": "Organization",
@@ -38,6 +56,48 @@ export function buildSchema(page) {
       description: c.desc,
       areaServed: ["인천", "부천", "시흥"]
     }))
+  });
+
+  // Service (방문형 관리 안내) — 요금·지역·집계 평점
+  graph.push({
+    "@type": "Service",
+    "@id": abs(page.url) + "#service",
+    name: `${page.h1 ? page.h1.replace(/\s*안내$/, "") : site.brand} 방문형 관리`,
+    serviceType: "방문형 관리(홈케어) 위치·예약 전 확인 안내",
+    provider: { "@id": site.baseUrl + "/#org" },
+    areaServed,
+    url: abs(page.url),
+    offers: pricing.courses.map((c) => ({
+      "@type": "Offer",
+      name: c.name,
+      priceCurrency: pricing.currency,
+      price: String(c.price),
+      description: c.desc,
+      priceSpecification: {
+        "@type": "UnitPriceSpecification",
+        price: String(c.price),
+        priceCurrency: pricing.currency,
+        referenceQuantity: { "@type": "QuantitativeValue", value: c.minutes, unitCode: "MIN" }
+      }
+    })),
+    ...(showReviews
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: String(reviewAgg.value),
+            reviewCount: reviewAgg.count,
+            bestRating: String(reviewAgg.best),
+            worstRating: String(reviewAgg.worst)
+          },
+          review: reviewAgg.items.map((r) => ({
+            "@type": "Review",
+            reviewRating: { "@type": "Rating", ratingValue: String(r.rating), bestRating: String(reviewAgg.best), worstRating: String(reviewAgg.worst) },
+            author: { "@type": "Person", name: r.author },
+            datePublished: r.date,
+            reviewBody: r.body
+          }))
+        }
+      : {})
   });
 
   const image = page.ogImage ? abs(page.ogImage) : site.baseUrl + "/assets/img/og-default.svg";
@@ -237,6 +297,47 @@ export function priceTable() {
   </div></section>`;
 }
 
+// ---------- 고객 후기 (실제 데이터 · 화면 노출 + 스키마 일치) ----------
+export function reviewsBlock() {
+  if (!reviewAgg) return "";
+  const stars = (v) => { const f = Math.round(v); return "★★★★★".slice(0, f) + "☆☆☆☆☆".slice(0, 5 - f); };
+  const cards = reviewAgg.items
+    .map((r) => `<figure class="review-card">
+      <div class="review-stars" aria-label="별점 ${r.rating}점">${stars(r.rating)} <b>${r.rating.toFixed(1)}</b></div>
+      <blockquote>${esc(r.body)}</blockquote>
+      <figcaption>${esc(r.author)} · <time datetime="${r.date}">${r.date}</time></figcaption>
+    </figure>`)
+    .join("");
+  return `<section class="section" aria-label="고객 후기"><div class="container">
+    <div class="section__head"><h2>고객 후기</h2><p>실제 이용 고객의 후기입니다. 평균 <strong>★ ${reviewAgg.value.toFixed(1)}</strong> / ${reviewAgg.best} · 총 ${reviewAgg.count}건</p></div>
+    <div class="review-grid">${cards}</div>
+  </div></section>`;
+}
+
+// ---------- 롱테일 관련 주제 내부링크 ----------
+export function longTailTopics(prefix, regionLabel) {
+  const p = prefix || "인천·부천·시흥";
+  const extra =
+    regionLabel === "인천" ? { label: `${p} 공항권·숙소 이용 전 확인`, url: "/use/airport-area/" }
+    : regionLabel === "시흥" ? { label: `${p} 산업지구·해안권 이동 시간 확인`, url: "/use/industrial-area/" }
+    : regionLabel === "부천" ? { label: `${p} 역세권 건물 출입 방식 확인`, url: "/use/station-area/" }
+    : { label: `${p} 신도시 생활권 이용 기준`, url: "/use/newtown/" };
+  const items = [
+    { label: `${p} 자택 방문 전 주소·공동현관 확인`, url: "/check/address/" },
+    { label: `${p} 호텔·숙소 객실 방문 가능 여부`, url: "/use/hotel/" },
+    { label: `${p} 오피스텔 공동현관·관리규정 확인`, url: "/use/officetel/" },
+    { label: `${p} 예약 가능 시간·야간 예약 안내`, url: "/check/time/" },
+    { label: `${p} 추가 이동비 기준 미리 확인`, url: "/check/travel-fee/" },
+    extra,
+    { label: `${p} 예약 변경·개인정보 처리 기준`, url: "/check/change-policy/" },
+    { label: `${p} 불법·선정적 서비스 불가 안내`, url: "/policy/service-standard/" }
+  ];
+  return `<section class="section section--sunken" aria-label="관련 주제"><div class="container">
+    <div class="section__head"><h2>${esc(p)} 관련 자주 찾는 주제</h2><p>방문 전 확인이 필요한 세부 주제를 이어서 확인하세요.</p></div>
+    <ul class="linklist">${items.map((i) => `<li><a href="${i.url}">${esc(i.label)}</a></li>`).join("")}</ul>
+  </div></section>`;
+}
+
 // ---------- 문의 CTA 밴드 ----------
 export function ctaBand() {
   return `<div class="container"><section class="cta-band" aria-label="문의">
@@ -271,7 +372,10 @@ export function page(p, bodyHtml) {
 <meta name="description" content="${esc(desc)}">
 ${kw ? `<meta name="keywords" content="${esc(kw)}">` : ""}
 <meta name="robots" content="${robots}">
+${site.naverVerification ? `<meta name="naver-site-verification" content="${site.naverVerification}">` : ""}
+${site.googleVerification ? `<meta name="google-site-verification" content="${site.googleVerification}">` : ""}
 <link rel="canonical" href="${canonical}">
+<link rel="alternate" type="application/rss+xml" title="${esc(site.brand)} 업데이트" href="/rss.xml">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="${esc(site.siteName)}">
 <meta property="og:title" content="${esc(p.title)}">

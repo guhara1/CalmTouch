@@ -69,5 +69,6 @@ export const contact = {
   ...whw("문의 안내"),
   lastUpdated: LAST_UPDATED,
   ogImage: OG,
-  imageAlt: "간다GO 문의하기 안내 이미지"
+  imageAlt: "간다GO 문의하기 안내 이미지",
+  noReviews: true
 };

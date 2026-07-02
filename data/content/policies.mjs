@@ -78,5 +78,6 @@ export const policies = raw.map((r) => ({
   ogImage: OG,
   imageAlt: `간다GO ${r.title} 안내 이미지`.replace(/안내 안내/g, "안내"),
   indexPriority: r.slug === "sitemap" ? 2 : 1,
-  contentStatus: "ready"
+  contentStatus: "ready",
+  noReviews: true
 }));

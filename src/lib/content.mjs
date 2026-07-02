@@ -4,7 +4,10 @@
 // (지역명만 바꾼 얇은 본문이 아니라 page.focus / nearby / useNote 등
 //  페이지 고유 필드를 실제 문장에 반영)
 // =====================================================================
-import { esc, faqBlock, trustBlock, linkList, ctaBand, priceTable, heroImage } from "./render.mjs";
+import { esc, faqBlock, trustBlock, linkList, ctaBand, priceTable, heroImage, reviewsBlock, longTailTopics } from "./render.mjs";
+
+const regionLabelOf = (r) => ({ incheon: "인천", bucheon: "부천", siheung: "시흥", "인천": "인천", "부천": "부천", "시흥": "시흥" }[r] || "");
+const prefixOf = (h1) => (h1 || "").replace(/\s*안내$/, "").replace(/\s*(연결 생활권|생활권|역세권|공항권|해안권|산업권)$/g, "").trim();
 
 const p = (t) => `<p>${t}</p>`;
 
@@ -78,10 +81,16 @@ export function detailBody(page) {
     </div></section>`);
   }
 
-  // 5) 요금표 (모든 지역 페이지 노출)
+  // 5) 롱테일 관련 주제 내부링크
+  secs.push(longTailTopics(prefixOf(page.h1), regionLabelOf(page.region)));
+
+  // 6) 요금표 (모든 지역 페이지 노출)
   secs.push(priceTable());
 
-  // 6) FAQ
+  // 7) 고객 후기 (실제 데이터)
+  secs.push(reviewsBlock());
+
+  // 8) FAQ
   secs.push(faqBlock(page.faq));
 
   // 7) 신뢰 블록 + 문의 CTA
