@@ -17,6 +17,7 @@ import { usecases } from "./data/content/usecases.mjs";
 import { checks } from "./data/content/checks.mjs";
 import { policies } from "./data/content/policies.mjs";
 import { hubs, main, contact } from "./data/content/hubs.mjs";
+import { districts } from "./data/content/districts.mjs";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const DIST = `${ROOT}/dist`;
@@ -116,6 +117,11 @@ async function buildHubs() {
     const st = stations.filter((s) => s.region === (h.region === "incheon" ? "인천" : h.region === "bucheon" ? "부천" : "시흥"));
     const lifeCards = life.map((l) => card(h.h1.split(" ")[0], l.h1.replace(" 안내", ""), l.overview.slice(0, 60) + "…", l.url, "생활권 보기")).join("");
     const stationLinks = st.map((s) => `<li><a href="${s.url}">${esc(s.h1.replace(" 안내", ""))}</a></li>`).join("");
+    const dist = districts.filter((d) => d.region === h.region);
+    const distSection = dist.length ? `<section class="section"><div class="container">
+  <div class="section__head"><h2>${esc(h.h1.split(" ")[0])} 구군 안내</h2><p>구별로 대표 생활권과 역세권을 정리했습니다. 세부 행정동은 대표 생활권으로 묶어 안내합니다.</p></div>
+  <ul class="linklist">${dist.map((d) => `<li><a href="${d.url}">${esc(d.name)} 생활권 안내</a></li>`).join("")}</ul>
+</div></section>` : "";
 
     const body = `
 <section class="hero"><div class="container hero__inner">
@@ -134,6 +140,8 @@ async function buildHubs() {
   <p>${esc(h.intro)}</p>
 </div></section>
 
+${distSection}
+
 <section class="section section--sunken"><div class="container">
   <div class="section__head"><h2>${esc(h.h1.split(" ")[0])} 주요 생활권</h2><p>생활권별로 신도시·원도심·산업·해안권 특성을 반영해 안내합니다.</p></div>
   <div class="grid grid--3">${lifeCards}</div>
@@ -151,6 +159,41 @@ ${faqBlock(h.faq)}
 ${ctaBand()}
 <div style="height:2rem"></div>`;
     await emit(h, body);
+  }
+}
+
+// ---------------- 구군 허브 ----------------
+async function buildDistricts() {
+  const stByName = (region) => stations.filter((s) => s.region === (region === "incheon" ? "인천" : region === "bucheon" ? "부천" : "시흥"));
+  for (const d of districts) {
+    const life = lifeareas.filter((l) => d.lifeSlugs.includes(l.slug));
+    const st = stByName(d.region).filter((s) => d.stationSlugs.includes(s.slug));
+    const lifeCards = life.map((l) => card(d.regionLabel, l.h1.replace(" 안내", ""), l.overview.slice(0, 60) + "…", l.url, "생활권 보기")).join("");
+    const stationLinks = st.map((s) => `<li><a href="${s.url}">${esc(s.h1.replace(" 안내", ""))}</a></li>`).join("");
+
+    const body = `
+<section class="section"><div class="container prose">
+  <h1>${esc(d.h1)}</h1>
+  <p>${esc(d.intro)}</p>
+  <div class="notice">세부·번호동은 개별 페이지를 만들지 않고 대표 생활권으로 묶어 안내합니다. 주요 행정동: ${d.dongs.map(esc).join(", ")}.</div>
+</div></section>
+
+<section class="section section--sunken"><div class="container">
+  <div class="section__head"><h2>${esc(d.name)} 주요 생활권</h2><p>구 내 대표 생활권을 성격별로 안내합니다.</p></div>
+  <div class="grid grid--3">${lifeCards}</div>
+</div></section>
+
+${st.length ? `<section class="section"><div class="container">
+  <div class="section__head"><h2>${esc(d.name)} 지하철역</h2><p>환승역도 노선별로 나누지 않고 역명 기준 1개 페이지로 안내합니다.</p></div>
+  <ul class="linklist">${stationLinks}</ul>
+</div></section>` : ""}
+
+${priceTable()}
+${faqBlock(d.faq)}
+<section class="section"><div class="container prose">${trustBlock(d.who, d.how, d.why)}</div></section>
+${ctaBand()}
+<div style="height:2rem"></div>`;
+    await emit(d, body);
   }
 }
 
@@ -229,6 +272,7 @@ async function run() {
 
   await buildMain();
   await buildHubs();
+  await buildDistricts();
 
   for (const l of lifeareas) await emit(l, detailBody(l));
   for (const c of corridors) await emit(c, detailBody(c));
