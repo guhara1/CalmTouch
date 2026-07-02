@@ -165,3 +165,62 @@ for (const [districtSlug, d] of Object.entries(districtDongs)) {
     });
   }
 }
+
+// ---------------- 시흥 (구 없음 → 행정동이 시(市) 바로 아래) ----------------
+// life: 생활권 페이지로 연결(중복 미생성) / slug: 고유 동 페이지 생성
+const siheungDongs = [
+  { name: "배곧동", life: "baegot-jeongwang", collapse: "배곧1·2동" },
+  { name: "정왕동", life: "baegot-jeongwang", collapse: "정왕본동·정왕1~4동" },
+  { name: "월곶동", life: "wolgot-oido" },
+  { name: "대야동", life: "daeya-sincheon" },
+  { name: "신천동", life: "daeya-sincheon" },
+  { name: "은행동", life: "eungye-janghyeon" },
+  { name: "장곡동", life: "siheung-cityhall-janghyeon" },
+  { name: "능곡동", life: "mokgam-neunggok" },
+  { name: "목감동", life: "mokgam-neunggok" },
+  { name: "신현동", slug: "sinhyeon-dong", area: "eungye-janghyeon", focus: "신현동은 시흥 중북부의 주거 지역으로, 은계지구와 시흥시청 생활권 사이에 자리합니다." },
+  { name: "매화동", slug: "maehwa-dong", area: "daeya-sincheon", focus: "매화동은 화훼단지와 농촌·주거가 섞인 시흥 동부의 지역으로, 서울 서남권·광명 인접권과 가깝습니다." },
+  { name: "군자동", slug: "gunja-dong", area: "siheung-cityhall-janghyeon", focus: "군자동은 군자지구와 시흥시청 인근의 주거 지역으로, 장현·능곡 생활권과 이어집니다." },
+  { name: "연성동", slug: "yeonseong-dong", area: "siheung-cityhall-janghyeon", focus: "연성동은 관곡지와 시흥시청 인근의 주거 지역으로, 장현지구 신도시와 가깝습니다." },
+  { name: "과림동", slug: "gwarim-dong", area: "daeya-sincheon", focus: "과림동은 시흥 북부의 외곽 지역으로, 물류·산업 시설과 광명·부천 인접권에 자리합니다." }
+];
+
+export function dongButtonsSiheung() {
+  return siheungDongs.map((x) =>
+    x.life
+      ? { label: x.name, url: lifeUrl("siheung", x.life), kind: "life" }
+      : { label: x.name, url: `/siheung/${x.slug}/`, kind: "dong" }
+  );
+}
+
+for (const x of siheungDongs) {
+  if (x.life) continue;
+  const url = `/siheung/${x.slug}/`;
+  const pLife = lifeName(x.area);
+  dongPages.push({
+    slug: x.slug,
+    region: "siheung",
+    url,
+    title: `${x.name} 출장마사지 · 시흥 생활권 안내｜간다GO`,
+    description: `${x.name} 방문 전 주소·건물 출입·${pLife || "시흥"} 인접권 확인 안내.`.slice(0, 80),
+    h1: `${x.name} 안내`,
+    keywords: [`${x.name} 출장마사지`, `${x.name} 홈타이`, `시흥 ${x.name}`],
+    breadcrumb: [crumb.home, crumb.siheung, { label: x.name, url }],
+    overview: `${x.focus} 방문 위치가 아파트 단지인지 상가·주택가인지에 따라 확인할 내용이 달라, 정확한 도로명 주소와 건물 유형을 먼저 확인하는 것이 좋습니다.`,
+    parentNote: `행정구역상 시흥시 ${x.name}에 속합니다. 시흥은 행정구(區)가 없어 행정동이 시 아래에 바로 편성됩니다.`,
+    lifeNote: `${x.name}은 ${pLife} 생활권과 이어지는 지역으로, 개별 동 위치와 함께 넓은 ${pLife} 생활권 안내를 확인하면 방문 위치를 더 정확히 파악할 수 있습니다.`,
+    nearbyNote: `${x.name}과 가까운 생활권·지하철역은 ${pLife} 안내에서 확인할 수 있으며, 인접 도시 이동권도 함께 살펴보는 것이 좋습니다.`,
+    useNote: `${x.name}에서 방문형 서비스를 이용할 때는 정확한 도로명 주소와 동·호수, 공동현관 출입 방식(오피스텔·아파트 관리 규정 포함)을 먼저 확인하는 것이 좋습니다. 시흥은 신도시·산업·해안·농촌권이 섞여 있어 방문 위치의 지역 성격 확인이 특히 중요합니다.`,
+    links: [{ title: "상위 생활권·지역", items: [
+      { label: `${pLife} 생활권 안내`, url: lifeUrl("siheung", x.area) },
+      { label: "시흥 생활권 안내", url: "/siheung/" }
+    ]}],
+    faq: baseFaq,
+    ...whw(`시흥 ${x.name}`),
+    lastUpdated: LAST_UPDATED,
+    ogImage: OG,
+    imageAlt: `시흥 ${x.name} 방문형 관리 안내 이미지`,
+    indexPriority: 2,
+    contentStatus: "ready"
+  });
+}

@@ -18,7 +18,7 @@ import { checks } from "./data/content/checks.mjs";
 import { policies } from "./data/content/policies.mjs";
 import { hubs, main, contact } from "./data/content/hubs.mjs";
 import { districts } from "./data/content/districts.mjs";
-import { dongButtons, dongPages } from "./data/content/dongs.mjs";
+import { dongButtons, dongButtonsSiheung, dongPages } from "./data/content/dongs.mjs";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const DIST = `${ROOT}/dist`;
@@ -120,10 +120,19 @@ async function buildHubs() {
     const lifeCards = life.map((l) => card(h.h1.split(" ")[0], l.h1.replace(" 안내", ""), l.overview.slice(0, 60) + "…", l.url, "생활권 보기")).join("");
     const stationLinks = st.map((s) => `<li><a href="${s.url}">${esc(s.h1.replace(" 안내", ""))}</a></li>`).join("");
     const dist = districts.filter((d) => d.region === h.region);
-    const distSection = dist.length ? `<section class="section"><div class="container">
-  <div class="section__head"><h2>${esc(h.h1.split(" ")[0])} 구군 안내</h2><p>구별로 대표 생활권과 역세권을 정리했습니다. 세부 행정동은 대표 생활권으로 묶어 안내합니다.</p></div>
+    let distSection = dist.length ? `<section class="section"><div class="container">
+  <div class="section__head"><h2>${esc(h.h1.split(" ")[0])} 구군 안내</h2><p>구별로 대표 생활권과 역세권을 정리했습니다. 세부 행정동은 각 구 페이지에서 버튼으로 확인하세요.</p></div>
   <ul class="linklist">${dist.map((d) => `<li><a href="${d.url}">${esc(d.name)} 생활권 안내</a></li>`).join("")}</ul>
 </div></section>` : "";
+    // 시흥: 구가 없어 행정동을 시 허브에 직접 노출
+    if (h.region === "siheung") {
+      const sd = dongButtonsSiheung();
+      const chips = sd.map((x) => `<a class="dong-chip${x.kind === "life" ? " dong-chip--life" : ""}" href="${x.url}">${esc(x.label)}</a>`).join("");
+      distSection = `<section class="section"><div class="container">
+  <div class="section__head"><h2>시흥 행정동</h2><p>시흥시는 행정구(區)가 없어 행정동을 바로 안내합니다. 번호동은 대표동 1개로 묶고, 생활권 안내가 있는 동은 해당 생활권 페이지로 연결됩니다.</p></div>
+  <div class="dong-grid">${chips}</div>
+</div></section>`;
+    }
 
     const body = `
 <section class="hero"><div class="container hero__inner">
