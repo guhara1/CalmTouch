@@ -2,7 +2,7 @@
   "brand": "간다GO",
   "brandEn": "GandaGO",
   "siteName": "간다GO",
-  "baseUrl": "https://calmtouch.co.kr",
+  "baseUrl": "https://calmtouch.netlify.app",
   "locale": "ko_KR",
   "phone": "0508-202-4719",
   "phoneHref": "tel:0508-202-4719",
