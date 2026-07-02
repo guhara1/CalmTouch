@@ -209,6 +209,18 @@ a.card:hover .card__more { color: var(--c-accent-300); gap: 0.6rem; }
 .linklist a { display: block; padding: 0.6rem 0.9rem; background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--radius-sm); font-size: var(--fs-sm); text-decoration: none; color: var(--c-ink-700); }
 .linklist a:hover { border-color: var(--c-accent-400); color: var(--c-accent-300); background: var(--c-accent-soft); }
 
+/* ---------- 행정동 버튼(칩) ---------- */
+.dong-grid { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+.dong-chip {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.6rem 1.05rem; border-radius: var(--radius-pill);
+  background: var(--c-surface); border: 1px solid var(--c-line-strong);
+  color: var(--c-ink-800); font-size: var(--fs-sm); font-weight: var(--fw-semibold); text-decoration: none;
+  transition: transform 0.16s var(--ease), border-color 0.16s var(--ease), color 0.16s var(--ease), background 0.16s var(--ease);
+}
+.dong-chip:hover { transform: translateY(-2px); border-color: var(--c-accent-400); color: var(--c-accent-300); background: var(--c-accent-soft); }
+.dong-chip--life::after { content: "생활권"; font-size: 0.66rem; font-weight: var(--fw-bold); color: var(--c-brand-300); background: color-mix(in srgb, var(--c-brand-btn) 16%, transparent); padding: 0.1rem 0.4rem; border-radius: var(--radius-pill); }
+
 /* ---------- 문의 CTA 밴드 ---------- */
 .cta-band {
   margin: var(--sp-8) 0 0; border-radius: var(--radius-lg); overflow: hidden;

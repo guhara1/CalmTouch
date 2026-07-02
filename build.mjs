@@ -18,6 +18,7 @@ import { checks } from "./data/content/checks.mjs";
 import { policies } from "./data/content/policies.mjs";
 import { hubs, main, contact } from "./data/content/hubs.mjs";
 import { districts } from "./data/content/districts.mjs";
+import { dongButtons, dongPages } from "./data/content/dongs.mjs";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const DIST = `${ROOT}/dist`;
@@ -170,13 +171,20 @@ async function buildDistricts() {
     const st = stByName(d.region).filter((s) => d.stationSlugs.includes(s.slug));
     const lifeCards = life.map((l) => card(d.regionLabel, l.h1.replace(" 안내", ""), l.overview.slice(0, 60) + "…", l.url, "생활권 보기")).join("");
     const stationLinks = st.map((s) => `<li><a href="${s.url}">${esc(s.h1.replace(" 안내", ""))}</a></li>`).join("");
+    const dongs = dongButtons(d.slug);
+    const dongChips = dongs.map((x) => `<a class="dong-chip${x.kind === "life" ? " dong-chip--life" : ""}" href="${x.url}">${esc(x.label)}</a>`).join("");
 
     const body = `
 <section class="section"><div class="container prose">
   <h1>${esc(d.h1)}</h1>
   <p>${esc(d.intro)}</p>
-  <div class="notice">세부·번호동은 개별 페이지를 만들지 않고 대표 생활권으로 묶어 안내합니다. 주요 행정동: ${d.dongs.map(esc).join(", ")}.</div>
+  <div class="notice">번호동(1·2·3동 등)은 대표동 1개로 묶어 안내하며, 이미 생활권 안내가 있는 동은 해당 생활권 페이지로 연결됩니다.</div>
 </div></section>
+
+${dongs.length ? `<section class="section"><div class="container">
+  <div class="section__head"><h2>${esc(d.name)} 행정동</h2><p>동별 안내로 바로 이동하세요. 생활권 안내가 있는 동은 대표 생활권 페이지로 연결됩니다.</p></div>
+  <div class="dong-grid">${dongChips}</div>
+</div></section>` : ""}
 
 <section class="section section--sunken"><div class="container">
   <div class="section__head"><h2>${esc(d.name)} 주요 생활권</h2><p>구 내 대표 생활권을 성격별로 안내합니다.</p></div>
@@ -292,6 +300,7 @@ async function run() {
   await buildHubs();
   await buildDistricts();
 
+  for (const dp of dongPages) await emit(dp, detailBody(dp));
   for (const l of lifeareas) await emit(l, detailBody(l));
   for (const c of corridors) await emit(c, detailBody(c));
   for (const s of stations) await emit(s, detailBody(s));
