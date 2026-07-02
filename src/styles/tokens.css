@@ -1,6 +1,7 @@
 /* =====================================================================
-   간다GO · 디자인 토큰 시스템 (Premium Palette)
-   Pretendard 기반. 토큰 값 자체를 프리미엄 팔레트로 교체한 버전.
+   간다GO · 디자인 토큰 시스템 (Dark Premium Palette)
+   블랙 계열 배경 + 밝은 텍스트. 가독성·시인성 우선(WCAG AA 지향).
+   Pretendard 기반. 컴포넌트는 이 토큰을 참조.
    ===================================================================== */
 
 @font-face {
@@ -11,42 +12,51 @@
 }
 
 :root {
-  /* ---- Premium 팔레트 : 브랜드(딥 그린-티ール) + 오렌지 액센트 ---- */
-  --c-ink-900: #0f1e1b;   /* 본문 최고 대비 */
-  --c-ink-800: #14312b;
-  --c-ink-700: #1d443c;
-  --c-ink-600: #2f5e54;
-  --c-ink-500: #4b756b;   /* 보조 텍스트 */
-  --c-ink-400: #7a978f;
+  color-scheme: dark;
 
-  --c-brand-900: #0b3d34;
-  --c-brand-700: #0f5f52;  /* 브랜드 프라이머리 */
-  --c-brand-500: #14867320; /* 미사용 대비용 */
-  --c-brand-600: #12766650;
+  /* ---- 텍스트 (ink) : 900이 가장 밝고 대비 높음 ---- */
+  --c-ink-900: #f5f8f6;   /* 헤딩 · 최고 대비 */
+  --c-ink-800: #e8ede9;   /* 본문 */
+  --c-ink-700: #d3dcd7;   /* 본문 보조 */
+  --c-ink-600: #b0bbb5;   /* 뮤트 */
+  --c-ink-500: #8c988f;   /* 서브틀 */
+  --c-ink-400: #6d7973;
 
-  /* 프리미엄 오렌지 액센트 (CTA / 문의 버튼) */
+  /* ---- 배경/표면 (레이어링: bg < sunken < surface < surface-2) ---- */
+  --c-bg: #0a0f0e;          /* 페이지 배경(near-black) */
+  --c-surface: #17211e;     /* 카드 */
+  --c-surface-2: #1c2723;   /* 세컨더리 카드/신뢰 블록 */
+  --c-surface-sunken: #111917; /* 밴드 섹션 */
+  --c-line: #273631;        /* 경계선 */
+  --c-line-strong: #38493f;
+
+  /* ---- 브랜드 (딥 티ール-그린) ---- */
+  --c-brand-900: #06201b;   /* 매우 어두운 브랜드(그라데이션 저점) */
+  --c-brand-700: #0f7a68;   /* 브랜드 딥(그라데이션 고점) */
+  --c-brand-btn: #17b79e;   /* 밝은 티ール 버튼 배경(어두운 텍스트) */
+  --c-brand-300: #6fe0cd;   /* 다크 위 밝은 브랜드 텍스트 */
+  --c-link: #46d6be;        /* 링크(밝은 티ール) */
+
+  /* ---- 오렌지 액센트 (CTA / 문의 버튼) ---- */
   --c-accent-700: #c2410c;
   --c-accent-600: #ea580c;
-  --c-accent-500: #f97316;  /* 오렌지 프라이머리 */
-  --c-accent-400: #fb923c;
-  --c-accent-050: #fff4ec;
+  --c-accent-500: #f97316;
+  --c-accent-400: #fb923c;  /* 다크 위 소형 액센트 텍스트 */
+  --c-accent-300: #fdba74;
+  --c-accent-soft: rgba(249, 115, 22, 0.14); /* 다크 위 오렌지 소프트 배경 */
 
-  /* 골드 하이라이트 (프리미엄 강조) */
-  --c-gold-500: #b8863b;
+  /* 골드 하이라이트 */
+  --c-gold-500: #c98f3f;
   --c-gold-300: #e2c185;
 
-  /* 표면/배경 */
-  --c-bg: #fbfaf7;          /* 살짝 웜한 오프화이트 */
-  --c-surface: #ffffff;
-  --c-surface-2: #f4f1ea;   /* 세컨더리 카드 */
-  --c-surface-sunken: #eef3f0;
-  --c-line: #e4e0d6;
-  --c-line-strong: #cfcabb;
-
-  /* 상태 */
-  --c-ok: #15803d;
-  --c-warn: #b45309;
-  --c-danger: #b91c1c;
+  /* ---- 상태 (다크 대응) ---- */
+  --c-ok: #34d399;
+  --c-warn: #fbbf24;
+  --c-warn-text: #fcd9a0;
+  --c-warn-bg: rgba(251, 191, 36, 0.12);
+  --c-danger: #f87171;
+  --c-danger-text: #fca5a5;
+  --c-danger-bg: rgba(239, 68, 68, 0.12);
 
   /* ---- 타이포 ---- */
   --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
@@ -63,7 +73,7 @@
 
   --lh-tight: 1.25;
   --lh-snug: 1.45;
-  --lh-body: 1.75;
+  --lh-body: 1.78;
 
   --fw-normal: 400;
   --fw-medium: 500;
@@ -88,10 +98,11 @@
   --radius-lg: 22px;
   --radius-pill: 999px;
 
-  --shadow-sm: 0 1px 2px rgba(15, 30, 27, 0.06), 0 1px 3px rgba(15, 30, 27, 0.05);
-  --shadow: 0 6px 20px -6px rgba(15, 30, 27, 0.16);
-  --shadow-lg: 0 20px 48px -16px rgba(15, 30, 27, 0.28);
-  --shadow-accent: 0 10px 26px -8px rgba(234, 88, 12, 0.5);
+  /* 다크 배경에선 그림자 대신 경계·발광으로 깊이 표현 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 24px 56px -18px rgba(0, 0, 0, 0.75);
+  --shadow-accent: 0 10px 26px -8px rgba(234, 88, 12, 0.55);
 
   --container: 1120px;
   --container-narrow: 760px;
