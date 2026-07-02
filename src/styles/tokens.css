@@ -1,0 +1,100 @@
+/* =====================================================================
+   간다GO · 디자인 토큰 시스템 (Premium Palette)
+   Pretendard 기반. 토큰 값 자체를 프리미엄 팔레트로 교체한 버전.
+   ===================================================================== */
+
+@font-face {
+  font-family: "Pretendard Variable";
+  font-display: swap;
+  font-weight: 45 920;
+  src: url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/woff2/PretendardVariable.woff2") format("woff2-variations");
+}
+
+:root {
+  /* ---- Premium 팔레트 : 브랜드(딥 그린-티ール) + 오렌지 액센트 ---- */
+  --c-ink-900: #0f1e1b;   /* 본문 최고 대비 */
+  --c-ink-800: #14312b;
+  --c-ink-700: #1d443c;
+  --c-ink-600: #2f5e54;
+  --c-ink-500: #4b756b;   /* 보조 텍스트 */
+  --c-ink-400: #7a978f;
+
+  --c-brand-900: #0b3d34;
+  --c-brand-700: #0f5f52;  /* 브랜드 프라이머리 */
+  --c-brand-500: #14867320; /* 미사용 대비용 */
+  --c-brand-600: #12766650;
+
+  /* 프리미엄 오렌지 액센트 (CTA / 문의 버튼) */
+  --c-accent-700: #c2410c;
+  --c-accent-600: #ea580c;
+  --c-accent-500: #f97316;  /* 오렌지 프라이머리 */
+  --c-accent-400: #fb923c;
+  --c-accent-050: #fff4ec;
+
+  /* 골드 하이라이트 (프리미엄 강조) */
+  --c-gold-500: #b8863b;
+  --c-gold-300: #e2c185;
+
+  /* 표면/배경 */
+  --c-bg: #fbfaf7;          /* 살짝 웜한 오프화이트 */
+  --c-surface: #ffffff;
+  --c-surface-2: #f4f1ea;   /* 세컨더리 카드 */
+  --c-surface-sunken: #eef3f0;
+  --c-line: #e4e0d6;
+  --c-line-strong: #cfcabb;
+
+  /* 상태 */
+  --c-ok: #15803d;
+  --c-warn: #b45309;
+  --c-danger: #b91c1c;
+
+  /* ---- 타이포 ---- */
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    system-ui, "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", sans-serif;
+
+  --fs-xs: 0.8125rem;
+  --fs-sm: 0.9375rem;
+  --fs-base: 1.0625rem;
+  --fs-md: 1.1875rem;
+  --fs-lg: 1.4375rem;
+  --fs-xl: 1.875rem;
+  --fs-2xl: 2.375rem;
+  --fs-3xl: 3rem;
+
+  --lh-tight: 1.25;
+  --lh-snug: 1.45;
+  --lh-body: 1.75;
+
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-black: 800;
+
+  /* ---- 스페이싱 ---- */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+  --sp-9: 6rem;
+
+  /* ---- 라운드 / 그림자 / 컨테이너 ---- */
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(15, 30, 27, 0.06), 0 1px 3px rgba(15, 30, 27, 0.05);
+  --shadow: 0 6px 20px -6px rgba(15, 30, 27, 0.16);
+  --shadow-lg: 0 20px 48px -16px rgba(15, 30, 27, 0.28);
+  --shadow-accent: 0 10px 26px -8px rgba(234, 88, 12, 0.5);
+
+  --container: 1120px;
+  --container-narrow: 760px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}

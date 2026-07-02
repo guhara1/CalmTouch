@@ -1,0 +1,23 @@
+{
+  "brand": "간다GO",
+  "brandEn": "GandaGO",
+  "siteName": "간다GO",
+  "baseUrl": "https://calmtouch.co.kr",
+  "locale": "ko_KR",
+  "phone": "0508-202-4719",
+  "phoneHref": "tel:0508-202-4719",
+  "reservationLabel": "전화예약",
+  "_telegram_note": "아래 telegram 값은 임시 플레이스홀더입니다. 실제 텔레그램 핸들로 교체하세요 (예: https://t.me/실제핸들).",
+  "telegram": {
+    "site": "https://t.me/gandago_site",
+    "partner": "https://t.me/gandago_partner"
+  },
+  "authorityLinks": {
+    "googleSearchGuide": "https://developers.google.com/search/docs/fundamentals/creating-helpful-content?hl=ko",
+    "incheonCity": "https://www.incheon.go.kr",
+    "bucheonCity": "https://www.bucheon.go.kr",
+    "siheungCity": "https://www.siheung.go.kr",
+    "seoulMetro": "https://www.seoulmetro.co.kr",
+    "koRail": "https://www.letskorail.com"
+  }
+}

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="간다GO 인천 부천 시흥 서부수도권 생활권 안내">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b3d34"/>
+      <stop offset="1" stop-color="#0f5f52"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.15" r="0.6">
+      <stop offset="0" stop-color="#f97316" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#f97316" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <circle cx="120" cy="120" r="26" fill="#fb923c"/>
+  <text x="170" y="132" font-family="Pretendard, sans-serif" font-size="46" font-weight="800" fill="#ffffff">간다GO</text>
+  <text x="120" y="330" font-family="Pretendard, sans-serif" font-size="72" font-weight="800" fill="#ffffff">인천·부천·시흥</text>
+  <text x="120" y="420" font-family="Pretendard, sans-serif" font-size="52" font-weight="700" fill="#e2c185">서부수도권 생활권 안내</text>
+  <text x="120" y="520" font-family="Pretendard, sans-serif" font-size="34" font-weight="500" fill="#cfe6df">송도·부평·중동·상동·배곧·정왕·은계·장현</text>
+  <text x="120" y="580" font-family="Pretendard, sans-serif" font-size="30" font-weight="600" fill="#fb923c">전화예약 0508-202-4719</text>
+</svg>

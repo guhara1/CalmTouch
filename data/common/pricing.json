@@ -1,0 +1,13 @@
+{
+  "title": "이용 코스와 요금 살펴보기",
+  "subtitle": "60·90·120분 코스별 기준 요금이며, 추가 비용 없이 있는 그대로 안내해 드립니다.",
+  "currency": "KRW",
+  "note": "지역·예약 시간대·이동 거리에 따라 상담 시 최종 확인됩니다.",
+  "detailUrl": "/check/travel-fee/",
+  "detailLabel": "상세 요금 안내 보기",
+  "courses": [
+    { "name": "60분 코스", "minutes": 60, "price": 90000, "desc": "기본 컨디션·릴랙스 케어", "recommended": false },
+    { "name": "90분 코스", "minutes": 90, "price": 150000, "desc": "아로마 포함 추천 구성", "recommended": true },
+    { "name": "120분 코스", "minutes": 120, "price": 180000, "desc": "전신 집중 프리미엄 케어", "recommended": false }
+  ]
+}
