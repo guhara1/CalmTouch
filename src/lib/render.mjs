@@ -13,6 +13,9 @@ const esc = (s = "") =>
 
 const abs = (u) => (u.startsWith("http") ? u : site.baseUrl + u);
 
+// 빌드시 build.mjs가 내용 해시 경로로 교체(캐시 무효화). 기본값은 폴백.
+export const assets = { css: ["/assets/tokens.css", "/assets/components.css"] };
+
 // 실제 후기 기반 집계 평점 (items가 있을 때만)
 export const reviewAgg = reviews.items && reviews.items.length
   ? {
@@ -394,8 +397,7 @@ ${site.googleVerification ? `<meta name="google-site-verification" content="${si
 <link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#0a0f0e">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="/assets/tokens.css">
-<link rel="stylesheet" href="/assets/components.css">
+${assets.css.map((h) => `<link rel="stylesheet" href="${h}">`).join("\n")}
 <script type="application/ld+json">${schema}</script>
 </head>
 <body>

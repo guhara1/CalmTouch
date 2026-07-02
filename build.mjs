@@ -8,7 +8,8 @@ import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import site from "./data/site.json" with { type: "json" };
-import { page, esc, faqBlock, trustBlock, ctaBand, linkList, buildSchema, priceTable, heroImage, reviewsBlock, longTailTopics } from "./src/lib/render.mjs";
+import { createHash } from "node:crypto";
+import { page, esc, faqBlock, trustBlock, ctaBand, linkList, buildSchema, priceTable, heroImage, reviewsBlock, longTailTopics, assets } from "./src/lib/render.mjs";
 import { detailBody, articleBody } from "./src/lib/content.mjs";
 import { lifeareas } from "./data/content/lifeareas.mjs";
 import { corridors } from "./data/content/corridors.mjs";
@@ -330,8 +331,15 @@ async function build404() {
 async function run() {
   if (existsSync(DIST)) await rm(DIST, { recursive: true });
   await mkdir(`${DIST}/assets/img`, { recursive: true });
-  await cp(`${ROOT}/src/styles/tokens.css`, `${DIST}/assets/tokens.css`);
-  await cp(`${ROOT}/src/styles/components.css`, `${DIST}/assets/components.css`);
+  // CSS 내용 해시 지문 → 캐시 무효화(immutable 캐시와 안전하게 공존)
+  const hashOf = (buf) => createHash("sha1").update(buf).digest("hex").slice(0, 10);
+  const tokensCss = await readFile(`${ROOT}/src/styles/tokens.css`);
+  const compCss = await readFile(`${ROOT}/src/styles/components.css`);
+  const th = hashOf(tokensCss);
+  const ch = hashOf(compCss);
+  await writeFile(`${DIST}/assets/tokens.${th}.css`, tokensCss);
+  await writeFile(`${DIST}/assets/components.${ch}.css`, compCss);
+  assets.css = [`/assets/tokens.${th}.css`, `/assets/components.${ch}.css`];
   // 이미지/파비콘 등 assets/img 전체 복사 (og, favicon.svg, PNG 아이콘들)
   await cp(`${ROOT}/assets/img`, `${DIST}/assets/img`, { recursive: true });
 
