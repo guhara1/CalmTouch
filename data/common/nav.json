@@ -1,6 +1,5 @@
 {
   "primary": [
-    { "label": "서부수도권 홈", "url": "/" },
     { "label": "인천", "url": "/incheon/" },
     { "label": "부천", "url": "/bucheon/" },
     { "label": "시흥", "url": "/siheung/" },
